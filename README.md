@@ -1,0 +1,161 @@
+# 🎬 Sakila Database Analysis
+
+This project is a comprehensive SQL-based analysis of the **Sakila Sample Database**, covering key insights and behaviors of customers, films, rentals, and financials.
+
+All logic is implemented in a single SQL script file:  
+**sakila_analysis.sql**  
+Running this file will create all the necessary **views**, **stored procedures**, and **functions** in your MySQL Sakila database.
+
+> **Note:** Since the Sakila dataset contains historical data from 2005-2006, procedures or views that depend on recent time ranges (e.g., last 3 months) may return no results when executed today. This behavior is expected.
+
+---
+
+## 📦 Project Structure
+
+```plaintext
+sakila-analysis/
+│
+├── views/                 # Reusable reports and insights
+├── procedures/            # Stored procedures for business logic
+├── functions/             # User-defined utility functions
+├── sakila_analysis.sql    #All logic
+├── README.md
+```
+
+---
+
+## 📊 Views
+
+### daily_sales_report
+Generates a report of daily sales by summing up rental payments for each day.  
+**Columns:** date, total_sales
+Useful for tracking rental revenue trends over time.
+
+### debt_customer_list
+Returns customers list with overdue movie rentals who owe late fees.
+**Columns:** customer_id, full_name, email
+Helps identify customers with overdue returns.
+
+### monthly_revenue
+Summarizes monthly revenue from all rentals.  
+**Columns:** month, total_sales 
+Useful for financial reports and comparing month-to-month performance.
+
+### monthly_sales_probability
+Estimates the probability of each film being rented again in the upcoming month, based on its performance in recent months.  
+**Columns:** FID, title, description, category, price, length, rating, count_avg, last_month_count, probability 
+probability: High, Medium, Low, Very Low
+
+### peak_rental_days
+Identifies the days with the highest number of rentals.  
+**Columns:** rental_day, rental_count  
+Used for understanding peak business days.
+
+### popular_actors
+Shows the most frequently rented actors based on their film appearances.  
+**Columns:** actor_id, first_name, last_name 
+Useful for marketing and recommendations.
+
+### popular_genres
+Lists genres that have received the most rentals.  
+**Columns:** genre, rental_count 
+Helps analyze customer preferences.
+
+### recent_active_customers
+Customers who have been active in the last 3 months.  
+**Columns:** rental_id, customer_id, full_name, email, rental_date
+Supports re-engagement strategies.
+
+### top_customers
+Customers who have rented the most films in total.  
+**Columns:** ID, full_name, phone, rental_count  
+Great for loyalty programs and VIP marketing.
+
+### top_grossing_movies
+Films that have generated the most revenue.  
+**Columns:** film_id, title, description, length, rating, rental_rate, total_sale 
+Insight into which films perform best commercially.
+
+### year_revenue
+Summarized yearly sales.  
+**Columns:** year, total_sales 
+Helpful for long-term performance tracking.
+
+---
+
+## ⚙️ Stored Procedures
+
+### actor_films_with_total_sales(IN actor_id)
+Returns all films by a specific actor along with total sales per film.  
+**Columns:** film_id, title, genres, length, rating, reales_year, total_sales  
+Useful for analyzing individual actor performance.
+
+### customer_late_fees(IN customer_id)
+Calculates total late fees and rental durations for a customer.  
+**Columns:** rental_id, film_id, title, rental_date, return_date, rental_duration, late, replacement_cost 
+Helps track customer behavior and payment discipline.
+
+### film_sales_probability(IN film_id)
+Estimates how likely a film is to be rented next month based on the last 3 months.  
+**Columns:** count_avg, last_month_count, probability 
+Same logic as monthly_sales_probability, but for one film.
+
+### find_customers_by_rental_or_amount(IN min_rental_count, IN min_total_amount)
+Finds customers with more than a certain number of rentals or rental total.  
+**Columns:** customer_id, full_name, email, rental_count, total_amount  
+For targeting high-value customers.
+
+### get_specefic_month_revenue(IN month, IN year, OUT total_sale)
+Returns total revenue for a specific month.  
+**Columns:** total_sale  
+Input format: 'YYYY-MM'
+
+### movie_suggestion_for_customers(IN customer_id)
+Recommends top 5 best-selling films from the customer’s most-rented genre.  
+**Columns:** film_id, title, description, length, rating, rental_rate, genre, total_sale  
+Useful for building recommendation engines.
+
+---
+
+## 🔧 Functions
+
+### avg_rental_duration(film_id)
+Returns the average number of days a film is rented.  
+Used for planning film availability and popularity.
+
+### customer_total_amount(customer_id)
+Calculates total payments made by a customer.  
+Useful for evaluating customer lifetime value.
+
+### film_total_amount(film_id)
+Calculates total revenue generated by a film.  
+Great for analyzing commercial performance.
+
+---
+
+## 🧪 Usage
+
+1. **Install the Sakila Database**
+    First, make sure you have the official Sakila database installed on your MySQL server.
+    You can download it and follow the installation guide from the official MySQL documentation: [Sakila Sample Database Installation Guide](https://dev.mysql.com/doc/sakila/en/)
+
+2. **Clone the repository**
+      ```bash
+    git clone https://github.com/zahraMh48/Sakila-Database-Analysis.git
+    ```
+    
+3. **Run the Analysis Script**
+    The entire analysis (views, procedures and functions) is included in a single SQL file: sakila_analysis.sql.
+    Runnig this file will set up everything automatically:
+    ```sql
+    SOURCE sakila_analysis.sql;
+    ```
+
+---
+
+## 👨‍💻 Author
+
+Created by zahraMh48
+• [GitHub](https://github.com/zahraMh48)   • [LinkedIn](https://www.linkedin.com/in/zahramahmoudi)   • [Portfolio](https://zahramh.ir/)
+
+
